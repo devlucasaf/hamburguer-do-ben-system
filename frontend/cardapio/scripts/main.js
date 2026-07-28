@@ -91,11 +91,23 @@ const menuData = [
     }
 ];
 
-// ===== DOM ELEMENTS =====
+// --- DOM ELEMENTS ---
 const menuGrid = document.getElementById("menuGrid");
 const filtroBotoes = document.querySelectorAll(".botao-filtro");
 
-// ===== FUNÇÃO PARA RENDERIZAR =====
+function obterIconeCategoria(categoria) {
+    if (categoria === "hamburguer") {
+        return '<i class="fa-solid fa-burger" aria-hidden="true"></i>';
+    }
+
+    if (categoria === "bebida") {
+        return '<i class="fa-solid fa-glass-water" aria-hidden="true"></i>';
+    }
+
+    return '<i class="fa-solid fa-utensils" aria-hidden="true"></i>';
+}
+
+// --- FUNÇÃO PARA RENDERIZAR ---
 function renderizarMenu(category = "all") {
     const itensFiltrados = category === "all"
         ? menuData
@@ -112,14 +124,32 @@ function renderizarMenu(category = "all") {
 
     menuGrid.innerHTML = itensFiltrados.map(item => `
         <div class="menu-item" data-id="${item.id}">
-            <div class="menu-item__imagem">${item.emoji}</div>
+            <div class="menu-item__imagem">
+                <i class="fa-solid fa-burger" aria-hidden="true"></i>
+            </div>
+
             <div class="menu-item__body">
                 <h3 class="menu-item__titulo">${item.name}</h3>
-                <span class="menu-item__categoria">${item.category}</span>
-                <p class="menu-item__descricao">${item.description}</p>
+
+                <span class="menu-item__categoria">
+                    ${item.category}
+                </span>
+
+                <p class="menu-item__descricao">
+                    ${item.description}
+                </p>
+
                 <div class="menu-item__footer">
-                    <span class="menu-item__preco">R$ ${item.price.toFixed(2)}</span>
-                    <span class="menu-item__badge">${item.category === "hamburguer" ? "🥩" : item.category === "bebida" ? "🥤" : "🍽️"}</span>
+                    <span class="menu-item__preco">
+                        R$ ${item.price.toFixed(2)}
+                    </span>
+
+                    <span
+                        class="menu-item__badge"
+                        aria-label="Categoria: ${item.category}"
+                    >
+                        ${obterIconeCategoria(item.category)}
+                    </span>
                 </div>
             </div>
         </div>
