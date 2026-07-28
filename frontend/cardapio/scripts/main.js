@@ -1,99 +1,19 @@
-const menuData = [
-    {
-        id: 1,
-        name: "Clássico Burguer",
-        category: "hamburguer",
-        price: 22.90,
-        description: "Pão, carne 150g, queijo, alface, tomate e maionese.",
-        emoji: "🍔"
-    },
-    {
-        id: 2,
-        name: "Bacon Cheese",
-        category: "hamburguer",
-        price: 27.90,
-        description: "Pão, carne 180g, queijo cheddar, bacon crocante e molho barbecue.",
-        emoji: "🧀"
-    },
-    {
-        id: 3,
-        name: "Veggie Burguer",
-        category: "hamburguer",
-        price: 24.90,
-        description: "Pão, hambúrguer de grão-de-bico, queijo, alface, tomate e maionese vegana."
-    },
-    {
-        id: 4,
-        name: "Duplo Cheddar",
-        category: "hamburguer",
-        price: 32.90,
-        description: "Pão, duas carnes 150g, duplo cheddar, cebola caramelizada e molho especial."
-    },
-    // ACOMPANHAMENTOS
-    {
-        id: 5,
-        name: "Batata Frita",
-        category: "acompanhamento",
-        price: 12.90,
-        description: "Porção de batatas rústicas crocantes com sal e pimenta."
-    },
-    {
-        id: 6,
-        name: "Onion Rings",
-        category: "acompanhamento",
-        price: 14.90,
-        description: "Anéis de cebola empanados e fritos, com molho agridoce."
-    },
-    {
-        id: 7,
-        name: "Chicken Nuggets",
-        category: "acompanhamento",
-        price: 16.90,
-        description: "6 unidades de nuggets de frango com molho mostarda e mel."
-    },
-    // BEBIDAS
-    {
-        id: 8,
-        name: "Refrigerante Lata",
-        category: "bebida",
-        price: 6.90,
-        description: "Coca-Cola, Fanta ou Sprite (350ml)."
-    },
-    {
-        id: 9,
-        name: "Suco Natural",
-        category: "bebida",
-        price: 8.90,
-        description: "Laranja, limão ou abacaxi (500ml)."
-    },
-    {
-        id: 10,
-        name: "Milkshake",
-        category: "bebida",
-        price: 14.90,
-        description: "Morango, chocolate ou baunilha (400ml)."
-    },
-    // SOBREMESAS
-    {
-        id: 11,
-        name: "Brownie com Sorvete",
-        category: "sobremesa",
-        price: 18.90,
-        description: "Brownie quente com bola de sorvete de creme e calda de chocolate."
-    },
-    {
-        id: 12,
-        name: "Petit Gâteau",
-        category: "sobremesa",
-        price: 19.90,
-        description: "Bolo de chocolate com recheio derretido, acompanha sorvete de baunilha."
-        
-    }
-];
-
 // --- DOM ELEMENTS ---
 const menuGrid = document.getElementById("menuGrid");
 const filtroBotoes = document.querySelectorAll(".botao-filtro");
+
+let menuData = [];
+
+// --- CARREGA OS ITENS DO ARQUIVO JSON LOCAL ---
+async function carregarMenuData() {
+    const resposta = await fetch("data/menu.json");
+
+    if (!resposta.ok) {
+        throw new Error(`Falha ao carregar cardapio (HTTP ${resposta.status})`);
+    }
+
+    return resposta.json();
+}
 
 function obterIconeCategoria(categoria) {
     if (categoria === "hamburguer") {
@@ -107,55 +27,95 @@ function obterIconeCategoria(categoria) {
     return '<i class="fa-solid fa-utensils" aria-hidden="true"></i>';
 }
 
-// --- FUNÇÃO PARA RENDERIZAR ---
-function renderizarMenu(category = "all") {
-    const itensFiltrados = category === "all"
-        ? menuData
-        : menuData.filter(item => item.category === category);
+// --- QUEBRA O NOME EM LINHAS EMPILHADAS PARA O CARD TIPOGRAFICO ---
+function quebrarNome(nome) {
+    const palavras = nome.trim().split(/\s+/);
+    const linhas = [];
+    let acumulador = "";
 
-    if (itensFiltrados.length === 0) {
+    palavras.forEach((palavra, indice) => {
+        if (palavra.length <= 3 && indice < palavras.length - 1) {
+            acumulador = acumulador ? `${acumulador} ${palavra}` : palavra;
+            return;
+        }
+
+        linhas.push(acumulador ? `${acumulador} ${palavra}` : palavra);
+        acumulador = "";
+    });
+
+    if (acumulador) {
+        linhas.push(acumulador);
+    }
+
+    return linhas
+        .map((linha, indice) => `
+            <span class="menu-item__linha menu-item__linha--${indice + 1}">${linha}</span>
+        `).join("");
+}
+
+// --- OBTEM OS GRUPOS QUE DEVEM SER RENDERIZADOS PARA A CATEGORIA ESCOLHIDA ---
+function obterGruposPorCategoria(categoria) {
+    if (categoria === "all") {
+        return menuData;
+    }
+
+    return menuData.filter(grupo => grupo.categoria === categoria);
+}
+
+// --- MONTA O HTML DE UM ÚNICO CARD ---
+function montarCardItem(item, categoria) {
+    return `
+        <article class="menu-item" data-categoria="${categoria}">
+            <div class="menu-item__nome-gigante" aria-hidden="true">
+                ${quebrarNome(item.nome)}
+            </div>
+
+            <div class="menu-item__conteudo">
+                <h3 class="menu-item__titulo sr-only">${item.nome}</h3>
+                <p class="menu-item__descricao">${item.descricao}</p>
+                <div class="menu-item__footer">
+                    <span class="menu-item__preco">R$ ${item.preco.toFixed(2)}</span>
+                    <span class="menu-item__badge" aria-label="${categoria}">
+                        ${obterIconeCategoria(categoria)}
+                    </span>
+                </div>
+            </div>
+        </article>
+    `;
+}
+
+// --- MONTA UMA SEÇÃO INTEIRA ---
+function montarSecaoGrupo(grupo) {
+    const cards = grupo.itens.map(item => montarCardItem(item, grupo.categoria)).join("");
+
+    return `
+        <section class="menu-grupo" data-categoria="${grupo.categoria}">
+            <h3 class="menu-grupo__titulo">${grupo.nomeExibicao}</h3>
+            <div class="menu-grupo__grid">
+                ${cards}
+            </div>
+        </section>
+    `;
+}
+
+// --- FUNÇÃO PARA RENDERIZAR O CARDAPIO INTEIRO A PARTIR DOS GRUPOS ---
+function renderizarMenu(categoria = "all") {
+    const grupos = obterGruposPorCategoria(categoria);
+    const totalItens = grupos.reduce((soma, grupo) => soma + grupo.itens.length, 0);
+
+    if (totalItens === 0) {
         menuGrid.innerHTML = `
-        <p style="grid-column:1/-1; text-align:center; color:var(--color-text-light); padding:2rem 0;">
-            Nenhum item encontrado para esta categoria.
-        </p>
+            <p style="text-align:center; color:var(--cor-texto-suave); padding:2rem 0;">
+                Nenhum item encontrado para esta categoria.
+            </p>
         `;
         return;
     }
 
-    menuGrid.innerHTML = itensFiltrados.map(item => `
-        <div class="menu-item" data-id="${item.id}">
-            <div class="menu-item__imagem">
-                <i class="fa-solid fa-burger" aria-hidden="true"></i>
-            </div>
-
-            <div class="menu-item__body">
-                <h3 class="menu-item__titulo">${item.name}</h3>
-
-                <span class="menu-item__categoria">
-                    ${item.category}
-                </span>
-
-                <p class="menu-item__descricao">
-                    ${item.description}
-                </p>
-
-                <div class="menu-item__footer">
-                    <span class="menu-item__preco">
-                        R$ ${item.price.toFixed(2)}
-                    </span>
-
-                    <span
-                        class="menu-item__badge"
-                        aria-label="Categoria: ${item.category}"
-                    >
-                        ${obterIconeCategoria(item.category)}
-                    </span>
-                </div>
-            </div>
-        </div>
-    `).join("");
+    menuGrid.innerHTML = grupos.map(montarSecaoGrupo).join("");
 }
 
+// --- LIGA OS BOTOES DE FILTRO ---
 filtroBotoes.forEach(botao => {
     botao.addEventListener("click", () => {
         filtroBotoes.forEach(b => b.classList.remove("ativo"));
@@ -165,4 +125,18 @@ filtroBotoes.forEach(botao => {
     });
 });
 
-renderizarMenu("all");
+// --- CARREGA O JSON E RENDERIZA O CARDAPIO INICIAL ---
+(async function iniciar() {
+    try {
+        menuData = await carregarMenuData();
+        renderizarMenu("all");
+    } catch (erro) {
+        console.error(erro);
+        menuGrid.innerHTML = `
+            <p style="text-align:center; color:var(--cor-erro); padding:2rem 0;">
+                Nao foi possivel carregar o cardapio. Tente novamente mais tarde.
+            </p>
+        `;
+    }
+})();
+

@@ -1,0 +1,125 @@
+[
+    {
+        "categoria": "hamburguer",
+        "nomeExibicao": "Hambúrgueres",
+        "itens": [
+            {
+                "id": 1,
+                "nome": "Clássico Burguer",
+                "preco": 22.90,
+                "descricao": "Pão, carne 150g, queijo, alface, tomate e maionese.",
+                "destaque": false,
+                "tags": ["classico"]
+            },
+            {
+                "id": 2,
+                "nome": "Bacon Cheese",
+                "preco": 27.90,
+                "descricao": "Pão, carne 180g, queijo cheddar, bacon crocante e molho barbecue.",
+                "destaque": true,
+                "tags": ["mais-pedido"]
+            },
+            {
+                "id": 3,
+                "nome": "Veggie Burguer",
+                "preco": 24.90,
+                "descricao": "Pão, hambúrguer de grão-de-bico, queijo, alface, tomate e maionese vegana.",
+                "destaque": false,
+                "tags": ["vegetariano"]
+            },
+            {
+                "id": 4,
+                "nome": "Duplo Cheddar",
+                "preco": 32.90,
+                "descricao": "Pão, duas carnes 150g, duplo cheddar, cebola caramelizada e molho especial.",
+                "destaque": true,
+                "tags": ["novidade"]
+            }
+        ]
+    },
+    {
+        "categoria": "acompanhamento",
+        "nomeExibicao": "Acompanhamentos",
+        "itens": [
+            {
+                "id": 5,
+                "nome": "Batata Frita",
+                "preco": 12.90,
+                "descricao": "Porção de batatas rústicas crocantes com sal e pimenta.",
+                "destaque": false,
+                "tags": []
+            },
+            {
+                "id": 6,
+                "nome": "Onion Rings",
+                "preco": 14.90,
+                "descricao": "Anéis de cebola empanados e fritos, com molho agridoce.",
+                "destaque": false,
+                "tags": []
+            },
+            {
+                "id": 7,
+                "nome": "Chicken Nuggets",
+                "preco": 16.90,
+                "descricao": "6 unidades de nuggets de frango com molho mostarda e mel.",
+                "destaque": false,
+                "tags": []
+            }
+        ]
+    },
+    {
+        "categoria": "bebida",
+        "nomeExibicao": "Bebidas",
+        "itens": [
+            {
+                "id": 8,
+                "nome": "Refrigerante Lata",
+                "preco": 6.90,
+                "descricao": "Coca-Cola, Fanta ou Sprite (350ml).",
+                "destaque": false,
+                "tags": []
+            },
+            {
+                "id": 9,
+                "nome": "Suco Natural",
+                "preco": 8.90,
+                "descricao": "Laranja, limão ou abacaxi (500ml).",
+                "destaque": false,
+                "tags": []
+            },
+            {
+                "id": 10,
+                "nome": "Milkshake",
+                "preco": 14.90,
+                "descricao": "Morango, chocolate ou baunilha (400ml).",
+                "destaque": false,
+                "tags": []
+            }
+        ]
+    },
+    {
+        "categoria": "sobremesa",
+        "nomeExibicao": "Sobremesas",
+        "itens": [
+            {
+                "id": 11,
+                "nome": "Brownie com Sorvete",
+                "preco": 18.90,
+                "descricao": "Brownie quente com bola de sorvete de creme e calda de chocolate.",
+                "destaque": false,
+                "tags": []
+            },
+            {
+                "id": 12,
+                "nome": "Petit Gâteau",
+                "preco": 19.90,
+                "descricao": "Bolo de chocolate com recheio derretido, acompanha sorvete de baunilha.",
+                "destaque": true,
+                "tags": ["novidade"]
+            }
+        ]
+    }
+]
+
+
+
