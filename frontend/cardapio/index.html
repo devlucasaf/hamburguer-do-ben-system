@@ -4,6 +4,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Hambúrguer do Ben - Cardápio Digital</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bebas+Neue&family=Oswald:wght@400;700&family=Righteous&display=swap" rel="stylesheet">
+
         <link rel="stylesheet" href="styles/global.css">
         <link rel="stylesheet" href="styles/layout.css">
         <link rel="stylesheet" href="styles/components.css">
@@ -12,8 +17,17 @@
     <body>
         <header class="header">
             <div class="container header__interno">
-                <h1 class="header__logo">Hambúrguer do Ben</h1>
-                <p class="header__slogan">O sabor que fica na memória</p>
+                <a href="/" class="header__marca" aria-label="Hambúrguer do Ben - Início">
+                    <img 
+                        src="img/hamburguer-do-ben.png" 
+                        alt="Logo Hambúrguer do Ben" 
+                        class="header__logo-img"
+                    />
+                    <div class="header__textos">
+                        <h1 class="header__logo">Hambúrguer do Ben</h1>
+                        <p class="header__slogan">O sabor que fica na memória</p>
+                    </div>
+                </a>
             </div>
         </header>
 
@@ -36,7 +50,7 @@
 
         <footer class="footer">
             <div class="container">
-                <p>&copy; 2026 Burguer House - Todos os direitos reservados.</p>
+                <p>&copy; 2026 Hambúrguer do Ben - Todos os direitos reservados.</p>
             </div>
         </footer>
 
